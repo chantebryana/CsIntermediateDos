@@ -9,30 +9,6 @@ namespace CsIntermediateDos
 
         public DateTime Starting { get; set; }
         public DateTime Stopping { get; set; }
-
-        public void LogTime(string word)
-        {
-            if (word == "start")
-            {
-                _starting = DateTime.Now;
-                Console.WriteLine("Start: {0}", _starting);
-            }
-            else if (word == "stop")
-            {
-                _stopping = DateTime.Now;
-                Console.WriteLine("Stop: {0}", _stopping);
-            }
-            else
-            {
-                Console.WriteLine("Please type 'start' or 'stop'.");
-            }
-        }
-
-        public TimeSpan Calculate(DateTime starting, DateTime stopping)
-        {
-            return stopping.Subtract(starting);
-        }
-
     }
 
     class Program
@@ -41,10 +17,14 @@ namespace CsIntermediateDos
         {
             var stopwatch = new StopwatchHP();
             string userInput;
-            Console.WriteLine("Type 'start' or 'stop': ");
+            Console.WriteLine("Press ENTER to start: ");
             userInput = Console.ReadLine();
-            userInput = userInput.ToLower();
-            stopwatch.LogTime(userInput);
+            stopwatch.Starting = DateTime.Now;
+            Console.WriteLine("Press ENTER to stop: ");
+            var stopInput = Console.ReadLine();
+            stopwatch.Stopping = DateTime.Now;
+            TimeSpan duration = stopwatch.Stopping.Subtract(stopwatch.Starting);
+            Console.WriteLine("Total time elapsed: {0}", duration);
         }
     }
 }
