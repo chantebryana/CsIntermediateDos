@@ -16,15 +16,30 @@ namespace CsIntermediateDos
         static void Main()
         {
             var stopwatch = new StopwatchHP();
-            string userInput;
-            Console.WriteLine("Press ENTER to start: ");
-            userInput = Console.ReadLine();
-            stopwatch.Starting = DateTime.Now;
-            Console.WriteLine("Press ENTER to stop: ");
-            var stopInput = Console.ReadLine();
-            stopwatch.Stopping = DateTime.Now;
-            TimeSpan duration = stopwatch.Stopping.Subtract(stopwatch.Starting);
-            Console.WriteLine("Total time elapsed: {0}", duration);
+            int i = 1;
+            var userInput = "";
+            while (i == 1)
+            {
+                Console.WriteLine("Type 'start', 'stop', or 'end': ");
+                userInput = Console.ReadLine();
+                userInput = userInput.ToLower();
+                if (userInput == "end")
+                {
+                    i = 0;
+                }
+                else if (userInput == "start")
+                {
+                    stopwatch.Starting = DateTime.Now;
+                }
+                else if (userInput == "stop")
+                {
+                    stopwatch.Stopping = DateTime.Now;
+                    TimeSpan span = stopwatch.Stopping.Subtract(stopwatch.Starting);
+                    Console.WriteLine("Total time elapsed:{0}", span);
+                    stopwatch.Starting = new DateTime(1950,01,01);
+                    stopwatch.Stopping = new DateTime(1950,01,01);
+                }
+            }
         }
     }
 }
