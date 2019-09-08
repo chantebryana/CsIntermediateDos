@@ -6,13 +6,14 @@ namespace CsIntermediateDos
     {
         private DateTime _start;
         private DateTime _stop;
+        private DateTime _default = new DateTime(0001, 01, 01);
 
         public DateTime Start { get; set; }
         public DateTime Stop { get; set; }
-        public DateTime Reset (DateTime timeStamp)
+        public void ResetStopwatch ()
         {
-            timeStamp = new DateTime(0001, 01, 01);
-            return timeStamp;
+            _start = _default;
+            _stop = _default;
         }
         public void RunStopwatch ()
         {
@@ -25,26 +26,37 @@ namespace CsIntermediateDos
                 userInput = userInput.ToLower();
                 if (userInput == "close")
                 {
-                    Console.WriteLine("Closing...");
+                    Console.WriteLine("Closing...\n");
                     i = 0;
                 }
-                else if (userInput == "start")      //add error logic if _start != 01/01/0001 and user types 'start'
+                else if (userInput == "start")
                 {
-                    // if (_start == 01/01/0001)
-                    _start = DateTime.Now;
-                    Console.WriteLine("Stopwatch started at {0}", _start);
-                    //else {error log, loop back to beginning of while loop}
+                    if (_start == _default) {
+                        _start = DateTime.Now;
+                        Console.WriteLine("Stopwatch started at {0}\n", _start);
+                    }
+                    else
+                    {
+                        Console.WriteLine("You've already started the stopwatch; 'start' is an invalid selection.\n");
+                    }
                 }
-                else if (userInput == "stop")       //add error logic if _start == 01/01/0001 and user types 'stop'
+                else if (userInput == "stop")
                 {
-                    //if (_start != DateTime(0001,01,01)
-                    _stop = DateTime.Now;
-                    TimeSpan span = _stop.Subtract(_start);
-                    Console.WriteLine("Stopwatch stopped at {0}", _stop);
-                    Console.WriteLine("Total time elapsed:{0}", span);
-                    _start = Reset(_start);
-                    _start = Reset(_stop);
-                    // else {error log, loop back to beginning of while loop}
+                    if (_start != _default) {
+                        _stop = DateTime.Now;
+                        TimeSpan span = _stop.Subtract(_start);
+                        Console.WriteLine("Stopwatch stopped at {0}", _stop);
+                        Console.WriteLine("Total time elapsed:{0}\n", span);
+                        ResetStopwatch();
+                    }
+                    else
+                    {
+                        Console.WriteLine("You haven't started the stopwatch yet; 'stop' is an invalid selection.\n");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("'{0}' is an invalid selection. Try again.\n", userInput);
                 }
             }
         }
