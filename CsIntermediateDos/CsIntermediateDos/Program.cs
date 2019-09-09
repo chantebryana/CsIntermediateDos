@@ -6,17 +6,39 @@ namespace CsIntermediateDos
     {
         private DateTime _start;
         private DateTime _stop;
-        private DateTime _default = new DateTime(0001, 01, 01);
 
         public DateTime Start { get; set; }
         public DateTime Stop { get; set; }
-        public void ResetStopwatch ()
+
+        public DateTime PressStart ()
         {
-            _start = _default;
-            _stop = _default;
+            _start = DateTime.Now;
+            return _start;
         }
-        public void RunStopwatch ()
+        public DateTime PressStop ()
         {
+            _stop = DateTime.Now;
+            return _stop;
+        }
+
+        public DateTime ResetStart ()
+        {
+            _start = new DateTime(0001, 01, 01);
+            return _start;
+        }
+
+        public DateTime ResetStop ()
+        {
+            _stop = new DateTime(0001, 01, 01);
+            return _stop;
+        }
+    }
+
+    class Program
+    {
+        static void Main()
+        {
+            var stopwatch = new StopwatchHP();
             int i = 1;
             var userInput = "";
             while (i == 1)
@@ -31,9 +53,10 @@ namespace CsIntermediateDos
                 }
                 else if (userInput == "start")
                 {
-                    if (_start == _default) {
-                        _start = DateTime.Now;
-                        Console.WriteLine("Stopwatch started at {0}\n", _start);
+                    if (stopwatch.Start == new DateTime(0001,01,01))
+                    {
+                        stopwatch.Start = stopwatch.PressStart();
+                        Console.WriteLine("Stopwatch started at {0}\n", stopwatch.Start);
                     }
                     else
                     {
@@ -42,12 +65,14 @@ namespace CsIntermediateDos
                 }
                 else if (userInput == "stop")
                 {
-                    if (_start != _default) {
-                        _stop = DateTime.Now;
-                        TimeSpan span = _stop.Subtract(_start);
-                        Console.WriteLine("Stopwatch stopped at {0}", _stop);
+                    if (stopwatch.Start != new DateTime(0001,01,01))
+                    {
+                        stopwatch.Stop = stopwatch.PressStop();
+                        TimeSpan span = stopwatch.Stop.Subtract(stopwatch.Start);
+                        Console.WriteLine("Stopwatch stopped at {0}", stopwatch.Stop);
                         Console.WriteLine("Total time elapsed:{0}\n", span);
-                        ResetStopwatch();
+                        stopwatch.Start = stopwatch.ResetStart();
+                        stopwatch.Stop = stopwatch.ResetStop();
                     }
                     else
                     {
@@ -59,15 +84,6 @@ namespace CsIntermediateDos
                     Console.WriteLine("'{0}' is an invalid selection. Try again.\n", userInput);
                 }
             }
-        }
-    }
-
-    class Program
-    {
-        static void Main()
-        {
-            var stopwatch = new StopwatchHP();
-            stopwatch.RunStopwatch();
         }
     }
 }
